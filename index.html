@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Pascheln</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        
+        <link rel="stylesheet" type="text/css" href="style.css" media="all" />
+        <script src="jquery-1.9.1.js" type="text/javascript"></script>
+        <script src="scripts.js" type="text/javascript"></script>
+        
+    </head>
+    
+    <body>
+        
+        <!-- Player Scores -->
+        <div id="player_1" class="playerColumn">
+            <h3>Pamela</h3>
+            <div class="total">0</div>
+            <div data-player="1" class="scores"><input value="0"/><br/></div>
+        </div>
+        <div id="player_2" class="playerColumn">
+            <h3>Christian</h3>
+            <div class="total">0</div>
+            <div data-player="2" class="scores"><input value="0"/><br/></div>
+        </div>
+        
+        
+        <!-- dize animation -->
+        <div id="rollTheDize"><img src="images/rolling.gif"></div>
+        
+        
+        <!-- dizes -->
+        <div id="dizes">
+            <img id="dize_1" src="images/1.png" class="down" data-value="1" data-round="1"/>
+            <img id="dize_2" src="images/2.png" class="down" data-value="2" data-round="1"/>
+            <img id="dize_3" src="images/3.png" class="down" data-value="3" data-round="1"/>
+            <img id="dize_4" src="images/4.png" class="down" data-value="4" data-round="1"/>
+            <img id="dize_5" src="images/5.png" class="down" data-value="5" data-round="1"/>
+            <img id="dize_6" src="images/6.png" class="down" data-value="6" data-round="1"/>
+        </div>
+        
+        <!-- current scores -->
+        <div id="curScores">
+            <div id="curPlayer">Spieler: <span>Name</span></div>
+            <div id="curScore">Aktuell: <span>0</span></div>
+            <div id="minScore">min: <span>350</span></div>
+        </div>
+        
+        <!-- actions -->
+        <div id="actions">
+            <a id="write" href="Javascript: write();" class="inactive"><img src="images/write.png"/></a>            
+            <a id="rolling" href="Javascript: letsRoll(); "><img src="images/roll.gif"/></a>
+            <a id="nextPlayer" href="Javascript: nextPlayer(); "><img src="images/nextPlayer.png"/></a>
+        </div>
+        
+    </body>
+</html>
