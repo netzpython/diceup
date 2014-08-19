@@ -1,3 +1,10 @@
+
+// Players
+var players = new Array('Pamela', 'Christian');
+
+// index current Player
+var playerId = 0;
+
 // number of throws
 var roundNr = 0;
 
@@ -14,41 +21,94 @@ var curScore = 0;
 var roundScore = 0;
 
 $(document).ready(function() {
+    
+    // bind dices click
     upDown();   
     
-    assignChange();
+    // create players table
+    playersTable();
 });
 
-function assignChange(){
-    $('.playerColumn input').unbind('change');
-    
-    $('.playerColumn input').change(function(){        
-        $(this).parent().append('<input value="0"/><br/>');
-        var colID = $(this).parent().attr('data-player');
-        setTimeout('summColumn('+colID+')',100);
-    });    
-}
 
-function summColumn(colID) {
-
-    score = 0;
-    $('#player_'+colID+' input').each(function() {
-        score = score + parseInt($(this).val());
-        console.log($(this).val());
+/**
+ * create the Player columns 
+ */
+function playersTable() {
+    // columns
+    $.each(players, function( index, value ) {
+        $('#players').append('<div id="player_'+index+'" class="playerColumn"><h3>'+value+'</h3><div class="total">0</div><div data-player="'+index+'" class="scores"></div></div>');
     });
     
-    $('#player_'+colID+' .total').html(score);
-    assignChange();
+    // current Player
+    $('#curPlayer span').html(players[0]);
+}
+
+
+function write(){  
+            
+    $('#player_'+playerId+' .scores').append(roundScore+'<br/>');
+    
+    var newScore = parseInt($('#player_'+playerId+' .total').html())+roundScore;
+    $('#player_'+playerId+' .total').html(newScore);
+    
+    //  min score
+    minScore = roundScore+50;
+    
+    // nextPlayer
+    nextPlayer(1);
+}
+
+function nextPlayer(written) {
+    if(!written){
+        $('#player_'+playerId+' .scores').append('0<br/>');
+        minScore = 350;
+    }
+    
+    // next player
+    playerId++;
+    
+    if(playerId==players.length){
+        playerId = 0;
+    }
+    
+    // show current Player
+    $('#curPlayer span').html(players[playerId]);
+    
+    // reset temp scores
+    roundScore = 0;
+    
+    // reset dices
+    $("#dizes img.up").toggleClass('down').toggleClass('up');
+    $("#dizes img").removeClass('counted countAble').removeAttr('data-value');
+    roundNr = 0;
+    turnNr++;
+    
+    // reset actions
+    $('#rolling').show();
+    $('#write').show();
+    $('#nextPlayer').hide();    
+    
+    // show minimum
+    $('#minScore span').html(minScore);
+    $('#curScore span').html(0);
+    
+    checkWriteAndRoll();
 }
 
 
 function upDown(){   
     $("#dizes img").click(function(){ 
-        if(roundNr>0){
+        if($(this).attr('data-value')>0 ){
             $(this).toggleClass('down').toggleClass('up');
-            var tempScore = sumDice('.up');
+            
+            sumDice('.up');
+            
+            checkWriteAndRoll();
+            
+        } else {
+            return false;
         }
-        checkWriteAndRoll();
+        
     }); 
 }
 
@@ -56,7 +116,7 @@ function checkWriteAndRoll() {
     
     // write
     if (
-        roundScore>minScore && 
+        roundScore>=minScore && 
         $('#dizes img.up[data-round="'+roundNr+'"]').length>0 && 
         $('#dizes img.up').length<6 &&
         $('#dizes img.down').length > $('#dizes img.down.countAble').length
@@ -67,7 +127,7 @@ function checkWriteAndRoll() {
     }
     
     // roll
-    if($('#dizes img.up[data-round="'+roundNr+'"].counted').length>0) {
+    if(($('#dizes img.up[data-round="'+roundNr+'"].counted').length>0 && $('#dizes img.up[data-round="'+roundNr+'"].counted').length===$('#dizes img.up[data-round="'+roundNr+'"]').length)|| roundNr===0) {
         $('#rolling').removeClass('inactive');
     } else {
         $('#rolling').addClass('inactive');
@@ -178,7 +238,7 @@ function sumDice(up) {
     
     // tripple
     if(!tempValue) {
-        tempValue = check4tripple(tempCount);
+        tempValue = check4tripple(tempCount,up);
     }
     
     // single 1 & 5
@@ -267,7 +327,11 @@ function check4tripple(tempCount,up) {
                 tempValue+= i*100;
             }
             
-            $('#dizes img'+up+'[data-round="'+roundNr+'"]:lt(3)').addClass('counted');
+            if(up){
+                $('#dizes img'+up+'[data-value="'+i+'"][data-round="'+roundNr+'"]:lt(3)').addClass('counted');
+            } else {
+                $('#dizes img[data-value="'+i+'"][data-round="'+roundNr+'"]:lt(3)').addClass('countAble');
+            }                         
         } 
     }
     
@@ -279,18 +343,28 @@ function check4tripple(tempCount,up) {
  * check for single 1 & 5
  * 
  * @param {array} tempValue value before counting 1 & 5
+ * @param {string} up selector up or down dices
  * @return {integer} tempValue total value of selected dices
  */
 function check4single(tempValue,up) {
     
-    $('#dizes img'+up+'[data-round="'+roundNr+'"]').not('counted').each(function(){ 
+    $('#dizes img'+up+'[data-round="'+roundNr+'"]').not('.counted').each(function(){ 
         var i = parseInt($(this).attr('data-value'));
         if(i===1){
             tempValue+=100;
-            $(this).addClass('counted');
+            
+            if(up){
+                $(this).addClass('counted');
+            } else {
+                $(this).addClass('countAble');
+            }            
         } else if (i===5) {
             tempValue+=50;
-            $(this).addClass('counted');
+            if(up){
+                $(this).addClass('counted');
+            } else {
+                $(this).addClass('countAble');
+            } 
         }
     });
     
