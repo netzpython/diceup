@@ -55,7 +55,12 @@ function upDown(){
 function checkWriteAndRoll() {
     
     // write
-    if(roundScore>minScore && $('#dizes img.up[data-round="'+roundNr+'"]').length>0 && $('#dizes img.up').length<6) {
+    if (
+        roundScore>minScore && 
+        $('#dizes img.up[data-round="'+roundNr+'"]').length>0 && 
+        $('#dizes img.up').length<6 &&
+        $('#dizes img.down').length > $('#dizes img.down.countAble').length
+       ) {
         $('#write').removeClass('inactive');
     } else {
         $('#write').addClass('inactive');
@@ -84,6 +89,11 @@ function letsRoll() {
     $('#rolling').addClass('inactive');
     $('#write').addClass('inactive');
     
+    // reset dices
+    if($("#dizes img.up").length===6) {
+        $("#dizes img").toggleClass('down').toggleClass('up');
+    }
+    
     // roll the dices
     roll();
     
@@ -102,6 +112,8 @@ function checkNext(){
 
 
 function roll() {
+    
+    $('#dizes img').removeClass('countAble');
     
     roundNr++;
     
@@ -154,15 +166,15 @@ function sumDice(up) {
     
     tempScores.sort();
     
-    if(up){
-        // street
-        tempValue = check4street(tempScores);
+    
+    // street
+    tempValue = check4street(tempScores,up);
 
-        // sixpack
-        if(!tempValue) {
-            tempValue = check4six(tempScores);
-        }
+    // sixpack
+    if(!tempValue) {
+        tempValue = check4six(tempScores,up);
     }
+    
     
     // tripple
     if(!tempValue) {
@@ -171,7 +183,7 @@ function sumDice(up) {
     
     // single 1 & 5
     tempValue = check4single(tempValue,up);
-    console.log('up'+up);
+
     // score of this turn
     if(up) {
         roundScore = curScore+tempValue;
@@ -186,15 +198,20 @@ function sumDice(up) {
  * check for a street
  * 
  * @param {array} tempScores selected dice values
+ * @param {string} up selector up or down dices
  * @return {integer} value
  */
-function check4street(tempScores) {
+function check4street(tempScores,up) {
     
     var street = [1,2,3,4,5,6];
     
     if(street.toString()===tempScores.toString()){
-        alert('Yeah, its a street Baby: 2500!');
-        $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
+        if(up){
+            alert('Yeah, its a street Baby: 2500!');
+            $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
+        } else {
+            $('#dizes img').addClass('countAble');
+        }
         return 2500;
     } else {
         return 0;
@@ -205,9 +222,10 @@ function check4street(tempScores) {
  * check for 6 same
  * 
  * @param {array} tempScores selected dice values
+ * @param {string} up selector up or down dices
  * @return {integer} value
  */
-function check4six(tempScores) {
+function check4six(tempScores,up) {
     
     var nr1 = GetUnique(tempScores);
     var tempValue = 0
@@ -217,8 +235,13 @@ function check4six(tempScores) {
         if(nr1[0]===1){
             tempValue = tempValue*10;
         }
-        alert('Sixpack: '+tempValue+'!');
-        $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
+        if(up){
+            alert('Sixpack: '+tempValue+'!');
+            $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
+        } else {
+            $('#dizes img').addClass('countAble');
+        }        
+
     }    
     return tempValue;        
 }
@@ -226,11 +249,12 @@ function check4six(tempScores) {
 
 /**
  * check for tripple
- * 
+ *  
  * @param {array} tempCount selected dice values grouped by value
+ * @param {string} up selector up or down dices
  * @return {integer} value
  */
-function check4tripple(tempCount) {
+function check4tripple(tempCount,up) {
     
     var tempValue = 0;
     
@@ -243,7 +267,7 @@ function check4tripple(tempCount) {
                 tempValue+= i*100;
             }
             
-            $('#dizes img.up[data-round="'+roundNr+'"]:lt(3)').addClass('counted');
+            $('#dizes img'+up+'[data-round="'+roundNr+'"]:lt(3)').addClass('counted');
         } 
     }
     
