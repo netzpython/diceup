@@ -1,6 +1,7 @@
 
 // Players
-var players = new Array('Pamela', 'Christian');
+var players = new Array();
+
 
 // index current Player
 var playerId = 0;
@@ -9,7 +10,7 @@ var playerId = 0;
 var roundNr = 0;
 
 // number of turns
-var turnNr = 1;
+var turnNr = 0;
 
 // min score to beat
 var minScore = 350;
@@ -20,14 +21,110 @@ var curScore = 0;
 // current score
 var roundScore = 0;
 
+// score where game ends
+var endScore = 10000;
+
+// last turn
+var endTurn = 9999;
+
 $(document).ready(function() {
+    
+    niceAlert('Wellcome');
+    
+    // bind setup buttons
+    $('#setGameMode').click(function(){
+        endScore = $('#gameMode').val();
+        $('#gameModeLayer').hide();
+        $('#playerLayer').show();
+    });
+    
+    $('#playerName').keyup(function(){
+        if($('#playerName').val()) {
+            $('#createPlayer').show();
+        } else {
+            $('#createPlayer').hide();
+        }
+    })
+    
+    //switch player type
+    $('#setHuman').click(function() {
+        $('#playerType').val('human');
+        $('#setHuman').addClass('active');
+        $('#setBot').removeClass('active');
+    });
+    $('#setBot').click(function() {
+        $('#playerType').val('bot');
+        $('#setBot').addClass('active');
+        $('#setHuman').removeClass('active');
+    });    
+    
+    // create Player
+    $('#createPlayer').click(function() {
+        
+        // create Player
+        players[playerId] = new Object();
+        players[playerId]["type"] = $('#playerType').val();
+        players[playerId]["name"] = $('#playerName').val();   
+        players[playerId]["total"] = 0;
+        players[playerId]["highScore"] = 0;
+        players[playerId]["toLow"] = 0;
+        playerId++;
+        
+        // reset form
+        $('#playerName').val('');
+        $('#startGame').show();
+    });
+    
+    // start Game
+    $('#startGame').click(function() {
+        startGame();
+    });
+});
+
+
+function startGame() {
+    
+    playerId = -1;
+    
+    // show gaming layer
+    $('#game').show();
+    $('#start').hide();
     
     // bind dices click
     upDown();   
     
     // create players table
     playersTable();
-});
+    
+    // bind actions
+    $('#write').click(function(){
+        if($(this).hasClass('inactive')) {
+            alert('Jetzt net!');
+        } else {
+            write();
+        }
+    });
+    
+    $('#rolling').click(function(){
+        if($(this).hasClass('inactive')) {
+            alert('Später vielleicht!');
+        } else {
+            letsRoll();
+        }
+    });
+    
+    $('#nextPlayer').click(function(){
+        if($(this).hasClass('inactive')) {
+            alert('Geht net!');
+        } else {
+            nextPlayer();
+        }
+    });   
+    
+    // first turn
+    playerId = -1;
+    nextPlayer();
+}
 
 
 /**
@@ -35,21 +132,32 @@ $(document).ready(function() {
  */
 function playersTable() {
     // columns
+    var thRow = '<th>#</th>';
+    var tdRow = '<td>&sum;</td>';
     $.each(players, function( index, value ) {
-        $('#players').append('<div id="player_'+index+'" class="playerColumn"><h3>'+value+'</h3><div class="total">0</div><div data-player="'+index+'" class="scores"></div></div>');
+        thRow += '<th>'+value['name']+'</th>';
+        tdRow += '<td id="player_'+index+'"><div class="total">0</div></td>';        
     });
     
-    // current Player
-    $('#curPlayer span').html(players[0]);
+    var playersTables = '<table><tr>'+thRow+'</tr><tr>'+tdRow+'</tr></table><table id="scoreTable"></table>';
+    
+    $('#players').html(playersTables);
+
 }
 
 
 function write(){  
             
-    $('#player_'+playerId+' .scores').append(roundScore+'<br/>');
+    $('.scoreRow_'+turnNr+' td:nth-child('+(playerId+2)+')').html(roundScore);
     
-    var newScore = parseInt($('#player_'+playerId+' .total').html())+roundScore;
-    $('#player_'+playerId+' .total').html(newScore);
+    players[playerId]["total"]+=roundScore;
+    $('#player_'+playerId+' .total').html(players[playerId]["total"]);
+    fastAlert(players[playerId]['name']+' writes '+roundScore);
+    
+    if(players[playerId]["total"]>=endScore) {
+        endTurn = turnNr;
+        niceAlert(players[playerId]['name']+' reaches the end score!');
+    }
     
     //  min score
     minScore = roundScore+50;
@@ -59,29 +167,51 @@ function write(){
 }
 
 function nextPlayer(written) {
-    if(!written){
-        $('#player_'+playerId+' .scores').append('0<br/>');
+        
+    // write score
+    if(!written && turnNr>0){
+        $('.scoreRow_'+turnNr+' td:nth-child('+(playerId+2)+')').html(0);
+        fastAlert(players[playerId]['name']+' writes 0 null zero');
         minScore = 350;
-    }
+    }    
     
     // next player
     playerId++;
     
     if(playerId==players.length){
-        playerId = 0;
-    }
+        playerId = 0;        
+    }      
     
     // show current Player
-    $('#curPlayer span').html(players[playerId]);
+    $('#curPlayer span').html(players[playerId]['name']);
+    niceAlert(players[playerId]['name']);
     
     // reset temp scores
     roundScore = 0;
     
     // reset dices
-    $("#dizes img.up").toggleClass('down').toggleClass('up');
+    $("#dizes img").addClass('reset');
     $("#dizes img").removeClass('counted countAble').removeAttr('data-value');
-    roundNr = 0;
-    turnNr++;
+    roundNr = 0;    
+    
+    // new score row
+    if(playerId === 0) {
+        turnNr++;
+        
+        // end game
+        if(turnNr>endTurn) {
+            endGame();
+        } 
+        
+        // new score row
+        scoreRow = '<tr class="scoreRow_'+turnNr+'"><td>'+turnNr+'</td>';
+        $.each(players, function( index, value ) {
+            scoreRow+='<td>-</td>';
+        });
+        scoreRow+='</tr>';
+        
+        $('#scoreTable').prepend(scoreRow);
+    }         
     
     // reset actions
     $('#rolling').show();
@@ -92,6 +222,14 @@ function nextPlayer(written) {
     $('#minScore span').html(minScore);
     $('#curScore span').html(0);
     
+    // check for bot
+    if(players[playerId]['type']==='bot') {
+        botsTurn();
+    } else {
+        $('body').removeClass('noMouse');
+    }
+    
+    // check write and roll
     checkWriteAndRoll();
 }
 
@@ -150,9 +288,11 @@ function letsRoll() {
     $('#write').addClass('inactive');
     
     // reset dices
+    $("#dizes img.up.reset").toggleClass('down').toggleClass('up');
     if($("#dizes img.up").length===6) {
         $("#dizes img").toggleClass('down').toggleClass('up');
     }
+    $("#dizes img").removeClass('reset');
     
     // roll the dices
     roll();
@@ -267,7 +407,7 @@ function check4street(tempScores,up) {
     
     if(street.toString()===tempScores.toString()){
         if(up){
-            alert('Yeah, its a street Baby: 2500!');
+           niceAlert('Yeah, its a street Baby: 2500!');
             $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
         } else {
             $('#dizes img').addClass('countAble');
@@ -296,7 +436,7 @@ function check4six(tempScores,up) {
             tempValue = tempValue*10;
         }
         if(up){
-            alert('Sixpack: '+tempValue+'!');
+            niceAlert('Sixpack: '+tempValue+'!');
             $('#dizes img.up[data-round="'+roundNr+'"]').addClass('counted');
         } else {
             $('#dizes img').addClass('countAble');
@@ -388,4 +528,45 @@ function GetUnique(inputArray) {
     }
    
     return outputArray;
+}
+
+var alertNr = 0;
+function niceAlert(text) {
+    $('#niceAlerts').prepend('<div id="niceAlert_'+alertNr+'" class="niceAlert active">'+text+'</div>');
+    $('#niceAlert_'+alertNr).fadeIn(300);
+    setTimeout('hideAlert()',1000);
+    alertNr++;
+}
+
+function hideAlert() {
+     $('#niceAlerts > div.niceAlert.active').last().removeClass('active').fadeOut(1000);
+}
+
+function fastAlert(text) {
+    $('#niceAlerts').prepend('<div id="niceAlert_'+alertNr+'" class="fastAlert active">'+text+'</div>');
+    $('#niceAlert_'+alertNr).fadeIn(150);
+    setTimeout('fastHideAlert()',600);
+    alertNr++;
+}
+
+function fastHideAlert() {
+    console.log('fastHide');
+     $('#niceAlerts > div.fastAlert.active').last().removeClass('active').fadeOut(300);
+}
+
+function endGame() {
+    
+    var winScore = 0;
+    var winner = '';
+    
+    $.each(players, function( index, value ) {
+           if(this['total']>winScore){
+               winScore = this['total'];
+               winner = this['name'];
+           }
+        });
+    
+    alert('Game Over!');
+    alert(winner+' wins with '+winScore+' points.');
+    location.reload();
 }

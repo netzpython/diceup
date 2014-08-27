@@ -9,44 +9,77 @@
         <link rel="stylesheet" type="text/css" href="style.css" media="all" />
         <script src="jquery-1.9.1.js" type="text/javascript"></script>
         <script src="scripts.js" type="text/javascript"></script>
+        <script src="bot.js" type="text/javascript"></script>
         
     </head>
     
     <body>
         
-        <!-- Player Scores -->
-        <div id="players">
+        <!-- start Layer -->
+        <div id="start">
+            <h1>Dice up!</h1>
             
-        </div>        
-        
-        
-        <!-- dize animation -->
-        <div id="rollTheDize"><img src="images/rolling.gif"></div>
-        
-        
-        <!-- dizes -->
-        <div id="dizes">
-            <img id="dize_1" src="images/1.png" class="down" />
-            <img id="dize_2" src="images/2.png" class="down" />
-            <img id="dize_3" src="images/3.png" class="down" />
-            <img id="dize_4" src="images/4.png" class="down" />
-            <img id="dize_5" src="images/5.png" class="down" />
-            <img id="dize_6" src="images/6.png" class="down" />
+            <!-- game Mode -->
+            <div id="gameModeLayer">
+                Game mode: <select id="gameMode">
+                                <option value="500">Test (500)</option>
+                                <option value="3000">Mini Game (3.000)</option>
+                                <option value="5000">Half Time (5.000)</option>
+                                <option value="10000">Full Game (10.000)</option>
+                           </select>
+                <button id="setGameMode">next</button>
+            </div>
+            
+            <!-- Player layer -->
+            <div id="playerLayer">
+                <label>Name: </label> <input id="playerName" placeholder="Player name"/>
+                <div class="playerTypes">
+                    <a id="setHuman" class="active"><img src="images/human.png"/></a>
+                    <a id="setBot"><img src="images/bot.png"/></a>
+                    <input id="playerType" type="hidden" value="human"/>
+                </div>
+                <button id="createPlayer">create Player</button>
+                <button id="startGame">startGame</button>
+            </div>            
         </div>
         
-        <!-- current scores -->
-        <div id="curScores">
-            <div id="curPlayer">Spieler: <span>Name</span></div>
-            <div id="curScore">Aktuell: <span>0</span></div>
-            <div id="minScore">min: <span>350</span></div>
+        
+        <!-- gaming Layer -->
+        <div id="game">
+            <!-- Player Scores -->
+            <div id="players"></div>        
+
+
+            <!-- dize animation -->
+            <div id="rollTheDize"><img src="images/rolling.gif"></div>
+
+
+            <!-- dizes -->
+            <div id="dizes">
+                <img id="dize_1" src="images/1.png" class="down reset" />
+                <img id="dize_2" src="images/2.png" class="down reset" />
+                <img id="dize_3" src="images/3.png" class="down reset" />
+                <img id="dize_4" src="images/4.png" class="down reset" />
+                <img id="dize_5" src="images/5.png" class="down reset" />
+                <img id="dize_6" src="images/6.png" class="down reset" />
+            </div>
+
+            <!-- current scores -->
+            <div id="curScores">
+                <div id="curPlayer">Spieler: <span>Name</span></div>
+                <div id="curScore">Aktuell: <span>0</span></div>
+                <div id="minScore">min: <span>350</span></div>
+            </div>
+
+            <!-- actions -->
+            <div id="actions">
+                <a id="write" class="inactive"><img src="images/write.png"/></a>            
+                <a id="rolling"><img src="images/roll.gif"/></a>
+                <a id="nextPlayer"><img src="images/nextPlayer.png"/></a>
+            </div>
         </div>
         
-        <!-- actions -->
-        <div id="actions">
-            <a id="write" href="Javascript: write();" class="inactive"><img src="images/write.png"/></a>            
-            <a id="rolling" href="Javascript: letsRoll(); "><img src="images/roll.gif"/></a>
-            <a id="nextPlayer" href="Javascript: nextPlayer(); "><img src="images/nextPlayer.png"/></a>
-        </div>
-        
+        <!-- gaming Layer -->
+        <div id="niceAlerts"></div>
     </body>
 </html>
