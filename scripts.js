@@ -31,60 +31,123 @@ $(document).ready(function() {
     
     niceAlert('Wellcome');
     
-    // bind setup buttons
-    $('#setGameMode').click(function(){
-        endScore = $('#gameMode').val();
-        $('#gameModeLayer').hide();
-        $('#playerLayer').show();
+    setTimeout(function(){startLayer();},1300);
+});
+
+function playerType(type){
+    // set value and button label
+    $('#playerType').val(type);
+    $('#createPlayer span').html(type);
+    
+    // human
+    if(type==='human'){        
+        $('#playerHead').removeClass('bot');
+        $('#botPool option').removeProp('selected');
+    }
+    
+    // bot
+    if(type==='bot'){        
+        $('#playerHead').addClass('bot');
+        $('#playerName').val('');
+    }    
+}
+
+function startLayer() {
+    
+    // show start layer
+    $('#start').fadeIn();
+    
+    // create bot select
+    var botSelect = '<option>choose a bot</option>';
+    $.each(botPool, function( index, value ) {
+        botSelect+= '<option value="'+index+'">'+value['name']+'</option>';
+    });
+    $('#botPool').html(botSelect);
+    
+    // switch to game mode (mobile only)
+    $('#chooseGameMode').click(function(){        
+        $('#gameModeLayer').show();
+        $('#playerLayer').hide();
     });
     
+    // add human
     $('#playerName').keyup(function(){
         if($('#playerName').val()) {
-            $('#createPlayer').show();
+            $('#createPlayer').show();  
+            playerType('human');
         } else {
             $('#createPlayer').hide();
         }
-    })
-    
-    //switch player type
-    $('#setHuman').click(function() {
-        $('#playerType').val('human');
-        $('#setHuman').addClass('active');
-        $('#setBot').removeClass('active');
     });
-    $('#setBot').click(function() {
-        $('#playerType').val('bot');
-        $('#setBot').addClass('active');
-        $('#setHuman').removeClass('active');
-    });    
+    
+    // add bot
+    $('#botPool').change(function(){
+        if($('#botPool').val()) {
+            $('#createPlayer').show();  
+            playerType('bot');
+        } else if(!$('#playerName').val()) {
+            $('#createPlayer').hide();
+        }
+    });
+    
     
     // create Player
     $('#createPlayer').click(function() {
         
-        // create Player
-        players[playerId] = new Object();
-        players[playerId]["type"] = $('#playerType').val();
-        players[playerId]["name"] = $('#playerName').val();   
-        players[playerId]["total"] = 0;
-        players[playerId]["highScore"] = 0;
-        players[playerId]["toLow"] = 0;
-        playerId++;
-        
-        // reset form
-        $('#playerName').val('');
-        $('#startGame').show();
+        playerObject();
+        playerListRow();
+        resetPlayerForm();      
+        $('#gameModeLayer').show();
+
     });
     
     // start Game
     $('#startGame').click(function() {
         startGame();
-    });
-});
+    });    
+}
+
+function playerObject() {
+    // create Player
+    players[playerId] = new Object();
+    players[playerId]["type"] = $('#playerType').val();          
+    players[playerId]["total"] = 0;
+    players[playerId]["highScore"] = 0;
+    players[playerId]["toLow"] = 0;        
+
+    // Human
+    if($('#playerType').val()==='human'){
+        players[playerId]["name"] = $('#playerName').val(); 
+    // Bot
+    } else {
+        players[playerId]["name"] = botPool[$('#botPool').val()]['name']; 
+        players[playerId]["botBrain"] = botPool[$('#botPool').val()];
+
+        $('#botPool option[value='+$('#botPool').val()+']').remove();
+    }    
+}
+
+function playerListRow() {
+    // hide hint
+    $('#noPlayersHint').hide();
+    
+    // new row in the playersList
+    var row = '<div>'+players[playerId]["name"]+'</div>';
+    $('#playerList').append(row);
+}
+
+function resetPlayerForm(){
+    playerId++;
+    $('#playerName').val('');
+    $('#createPlayer').hide();
+    playerType('human');    
+}
 
 
 function startGame() {
     
     playerId = -1;
+    endScore = $('#gameMode').val();
     
     // show gaming layer
     $('#game').show();

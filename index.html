@@ -17,7 +17,27 @@
         
         <!-- start Layer -->
         <div id="start">
-            <h1>Dice up!</h1>
+            <h1>Dice up!</h1>            
+            
+            <!-- Player layer -->
+            <div id="playerLayer">
+                
+                <div id="createPlayers">
+                    <h2>Create Player</h2>
+                    <div id="playerHead"></div>
+                    <div id="playerTypes">
+                        <input id="playerType" type="hidden" value="human"/>
+                        <div><input id="playerName" placeholder="Player name"/></div>
+                        <div><select id="botPool"></select></div>
+                    </div>
+                    <div><button id="createPlayer">add <span>human</span></button></div>
+                    <div class="cB"></div>
+                </div>
+                <div id="playerList">
+                    <div id="noPlayersHint">Enter a name or choose a bot and press the "add" button to create a player.</div>
+                    
+                </div><!--<button id="chooseGameMode">choose game mode</button>-->
+            </div>        
             
             <!-- game Mode -->
             <div id="gameModeLayer">
@@ -27,20 +47,9 @@
                                 <option value="5000">Half Time (5.000)</option>
                                 <option value="10000">Full Game (10.000)</option>
                            </select>
-                <button id="setGameMode">next</button>
+                <button id="startGame">startGame</button>
             </div>
             
-            <!-- Player layer -->
-            <div id="playerLayer">
-                <label>Name: </label> <input id="playerName" placeholder="Player name"/>
-                <div class="playerTypes">
-                    <a id="setHuman" class="active"><img src="images/human.png"/></a>
-                    <a id="setBot"><img src="images/bot.png"/></a>
-                    <input id="playerType" type="hidden" value="human"/>
-                </div>
-                <button id="createPlayer">create Player</button>
-                <button id="startGame">startGame</button>
-            </div>            
         </div>
         
         

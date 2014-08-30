@@ -1,3 +1,33 @@
+/**
+ * 
+ * Pool of diffrent Bots
+ */
+
+// Bots
+var botPool = new Array();
+
+// stupid machine
+botPool[0] = new Object();
+botPool[0]["name"] = 'Stupid Machine';
+
+// Pamela Anders
+botPool[1] = new Object();
+botPool[1]["name"] = 'Pamela Anders';
+
+// Risky Martin
+botPool[2] = new Object();
+botPool[2]["name"] = 'Risky Martin';
+
+// Shizo Bot
+botPool[3] = new Object();
+botPool[3]["name"] = 'Shizo Bot';
+
+
+/**
+ * 
+ * Bot functions
+ */
+
 
 // bot starts to dice
 function botsTurn() {

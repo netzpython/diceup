@@ -24,9 +24,9 @@ body {
 
 /* hidden on startup */
 #game, 
-#startGame, 
+#start,
 #createPlayer,
-#playerLayer,
+#gameModeLayer,
 #niceAlerts > div,
 #rollTheDize { display: none; }
 
