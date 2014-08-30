@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    	<title>Create a CSS Cube Example</title>
+	<meta name="description" content="Learn how to create a 3D CSS cube with only CSS and HTML!" />
+	<link rel="stylesheet" type="text/css" href="/wp-content/themes/punky/fonts.css" media="all"><link rel="stylesheet" type="text/css" href="/wp-content/themes/punky/style.css?1409025136172" media="all"><!--[if IE]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script><![endif]--><style>
+.demo-frame header, .demo-frame h1, .demo-frame .demo-conversion {
+	display: none;
+}
+
+.demo-wrapper {
+	min-height: 500px;
+}
+
+.bsap {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+</style>	<style type="text/css">
+		/*************** ANIMATIONS ***************/
+		@-webkit-keyframes cube-spin {
+			from { -webkit-transform: rotateY(0); }
+			to { -webkit-transform: rotateY(360deg); }
+		}
+
+		@-ms-keyframes cube-spin {
+			from { ms-transform: rotateY(0); }
+			to { ms-transform: rotateY(360deg); }
+		}
+
+		@keyframes cube-spin {
+			from { transform: rotateY(0); }
+			to { transform: rotateY(360deg); }
+		}
+
+		@-webkit-keyframes spin-vertical {
+			from { -webkit-transform: rotateX(0); }
+			to { -webkit-transform: rotateX(-360deg); }
+		}
+
+		@-ms-keyframes spin-vertical {
+			from { ms-transform: rotateX(0); }
+			to { ms-transform: rotateX(-360deg); }
+		}
+
+		@keyframes spin-vertical {
+			from { transform: rotateX(0); }
+			to { transform: rotateX(-360deg); }
+		}
+
+		
+		/*************** STANDARD CUBE ***************/
+		.cube-wrap {
+			-webkit-perspective: 800px;
+			-webkit-perspective-origin: 50% 100px;
+
+			-moz-perspective: 800px;
+			-moz-perspective-origin: 50% 100px;
+
+			-ms-perspective: 800px;
+			-ms-perspective-origin: 50% 100px;
+
+			perspective: 800px;
+			perspective-origin: 50% 100px;
+		}
+
+		.cube {
+			position: relative;
+			width: 200px;
+			margin: 0 auto;
+			
+			-webkit-transform-style: preserve-3d;
+			-webkit-animation: cube-spin 5s infinite linear;
+			
+			-moz-transform-style: preserve-3d;
+			-moz-animation: cube-spin 5s infinite linear;
+
+			-ms-transform-style: preserve-3d;
+			-ms-animation: cube-spin 5s infinite linear;
+
+			transform-style: preserve-3d;
+			animation: cube-spin 5s infinite linear;
+		}
+
+		.cube div {
+			position: absolute;
+			width: 200px;
+			height: 200px;
+			background: rgba(255,255,255,0.1);
+			box-shadow: inset 0 0 30px rgba(125,125,125,0.8);
+			font-size: 20px;
+			text-align: center;
+			line-height: 200px;
+			color: rgba(0,0,0,0.5);
+			font-family: sans-serif;
+			text-transform: uppercase;
+		}
+
+		/*************** DEPTH CUBE ***************/
+		.depth div.back-pane {
+			-webkit-transform: translateZ(-100px) rotateY(180deg);
+			-moz-transform: translateZ(-100px) rotateY(180deg);
+			-ms-transform: translateZ(-100px) rotateY(180deg);
+
+			transform: translateZ(-100px) rotateY(180deg);
+		}
+		.depth div.right-pane {
+			-webkit-transform:rotateY(-270deg) translateX(100px);
+			-webkit-transform-origin: top right;
+
+			-moz-transform:rotateY(-270deg) translateX(100px);
+			-moz-transform-origin: top right;
+
+			-ms-transform:rotateY(-270deg) translateX(100px);
+			-ms-transform-origin: top right;
+
+			transform:rotateY(-270deg) translateX(100px);
+			transform-origin: top right;
+		}
+		.depth div.left-pane {
+			-webkit-transform:rotateY(270deg) translateX(-100px);
+			-webkit-transform-origin: center left;
+
+			-moz-transform:rotateY(270deg) translateX(-100px);
+			-moz-transform-origin: center left;
+
+			-ms-transform:rotateY(270deg) translateX(-100px);
+			-ms-transform-origin: center left;
+
+			transform:rotateY(270deg) translateX(-100px);
+			transform-origin: center left;
+		}
+		.depth div.top-pane {
+			-webkit-transform:rotateX(-90deg) translateY(-100px);
+			-webkit-transform-origin: top center;
+
+			-moz-transform:rotateX(-90deg) translateY(-100px);
+			-moz-transform-origin: top center;
+
+			-ms-transform:rotateX(-90deg) translateY(-100px);
+			-ms-transform-origin: top center;
+
+			transform:rotateX(-90deg) translateY(-100px);
+			transform-origin: top center;
+		}
+		.depth div.bottom-pane {
+			-webkit-transform:rotateX(90deg) translateY(100px);
+			-webkit-transform-origin: bottom center;
+
+			-moz-transform:rotateX(90deg) translateY(100px);
+			-moz-transform-origin: bottom center;
+
+			-ms-transform:rotateX(90deg) translateY(100px);
+			-ms-transform-origin: bottom center;
+
+			transform:rotateX(90deg) translateY(100px);
+			transform-origin: bottom center;
+		}
+		.depth div.front-pane {
+			-webkit-transform: translateZ(100px);
+			-moz-transform: translateZ(100px);
+			-ms-transform: translateZ(100px);
+
+			transform: translateZ(100px);
+		}
+
+
+		/*************** VERTICAL SPINNING CUBE ***************/
+		.cube-wrap.vertical .cube {
+			-webkit-transform-origin: 0 100px;
+			-moz-transform-origin: 0 100px;
+			-ms-transform-origin: 0 100px;
+			transform-origin: 0 100px;
+
+			-webkit-animation: spin-vertical 5s infinite linear;
+			-moz-animation: spin-vertical 5s infinite linear;
+			-ms-animation: spin-vertical 5s infinite linear;
+			animation: spin-vertical 5s infinite linear;
+		}
+
+		.cube-wrap.vertical .depth div.top-pane {
+			-webkit-transform:rotateX(-270deg) translateY(-100px);
+			-moz-transform:rotateX(-270deg) translateY(-100px);
+			-ms-transform:rotateX(-270deg) translateY(-100px);
+
+			transform:rotateX(-270deg) translateY(-100px);
+		}
+
+		.cube-wrap.vertical .depth div.back-pane {
+			-webkit-transform: translateZ(-100px) rotateX(180deg);
+			-moz-transform: translateZ(-100px) rotateX(180deg);
+			-ms-transform: translateZ(-100px) rotateX(180deg);
+
+			transform: translateZ(-100px) rotateX(180deg);
+		}
+
+		.cube-wrap.vertical .depth div.bottom-pane {
+			-webkit-transform: rotateX(-90deg) translateY(100px);
+			-moz-transform: rotateX(-90deg) translateY(100px);
+			-ms-transform: rotateX(-90deg) translateY(100px);
+			transform: rotateX(-90deg) translateY(100px);
+		}
+
+		/*************** FLAT SPINNING CUBE ***************/
+		.cube-wrap.flat {
+			-webkit-perspective: none;
+			-webkit-perspective-origin: 0 0;
+
+			-moz-perspective: none;
+			-moz-perspective-origin: 0 0;
+
+			-ms-perspective: none;
+			-ms-perspective-origin: 0 0;
+
+			perspective: none;
+			perspective-origin: 0 0;
+		}
+	</style>
+</head>
+<body>
+<script>
+z={analyticsID:"UA-2087880-2",themePath:"/wp-content/themes/punky",pluginPath:"libs/curl/src/curl/plugin/",domain:"davidwalsh.name",loadSidebar:!(-1!=navigator.userAgent.toLowerCase().indexOf("googlebot")),d:document,w:this},z.baseUrl=z.themePath+"/js/",-1==location.hostname.indexOf(z.domain)&&(z.isDebug=1,z.analyticsID=0),z.moo="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools"+(z.isDebug?"":"-yui-compressed")+".js";z.analyticsID&&function(){!function(e,a,n,t,c,s,i){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,s=a.createElement(n),i=a.getElementsByTagName(n)[0],s.async=1,s.src=t,i.parentNode.insertBefore(s,i)}(z.w,z.d,"script","//www.google-analytics.com/analytics.js","ga"),ga("create",z.analyticsID,z.domain),ga("send","pageview"),ga("set","nonInteraction",!0)}();</script>
+
+<!-- accessibility header --><ul class="a11y-menu"><li><a href="/">Home</a></li><li><a href="#main">Main Content</a></li></ul><!-- site header and nav menu --><header id="top"><div class="center clear"><div class="header-title"><a href="/" class="logo"><img src="/wp-content/themes/punky/images/logo.png" alt="Logo" /><span>DWB</span><i class="fa fa-bars" data-open-icon="fa-times" aria-hidden="true" id="logo-icon"></i></a><nav id="main-nav"><div class="relative clear"><i class="fa fa-caret-up" aria-hidden="true"></i><ul class="main-nav-left"><li><a href="/">Home</a></li><li><a href="/page/1" data-content="tutorials">Tutorials</a></li><li><a href="/tutorials/features" data-content="features">Features</a></li><li><a href="/tutorials/demos" data-content="demos">Demos</a></li><li><a href="/topics" data-content="popular">Topics</a></li><li><a href="/about" data-content="about">The Blog</a></li></ul><ul class="main-nav-right"><li id="nav-tutorials"><div class="heading">Recent Tutorials</div><ul class="nav-posts"><li><a href="http://davidwalsh.name/20-great-tools-developers" class="bold">20 Great Tools for&nbsp;Developers</a></li><li><a href="http://davidwalsh.name/window-open">JavaScript Redirects and&nbsp;window.open</a></li><li><a href="http://davidwalsh.name/css-do">CSS&nbsp;`do-*`</a></li><li><a href="http://davidwalsh.name/truth-programming-perception">The Truth About Programming&nbsp;Perception</a></li><li><a href="http://davidwalsh.name/remove-mobile-firefox-button-gradient">Remove Mobile Firefox Button&nbsp;Gradient</a></li></ul></li><li id="nav-features"><div class="heading">Recent Features</div><ul class="nav-posts"><li><a href="http://davidwalsh.name/webcam-animated-gif" class="bold">From Webcam to Animated GIF: the Secret Behind&nbsp;chat.meatspac.es!</a></li><li><a href="http://davidwalsh.name/wordpress-comment-spam">How I Stopped WordPress Comment&nbsp;Spam</a></li><li><a href="http://davidwalsh.name/parallax">Creating Scrolling Parallax Effects with&nbsp;CSS</a></li><li><a href="http://davidwalsh.name/css-js-animation">CSS vs. JS Animation: Which is&nbsp;Faster?</a></li><li><a href="http://davidwalsh.name/write-javascript-promises">Write Better JavaScript with&nbsp;Promises</a></li></ul></li><li id="nav-demos"><div class="heading">Interactive Demos</div><ul class="nav-posts"><li><a href="http://davidwalsh.name/svg-animation" class="bold">The Simple Intro to SVG&nbsp;Animation</a></li><li><a href="http://davidwalsh.name/webcam-animated-gif">From Webcam to Animated GIF: the Secret Behind&nbsp;chat.meatspac.es!</a></li><li><a href="http://davidwalsh.name/parallax-scroll">Parallax Sound Waves Animating on&nbsp;Scroll</a></li><li><a href="http://davidwalsh.name/scroll-iframes-ios">Scroll IFRAMEs on&nbsp;iOS</a></li><li><a href="http://davidwalsh.name/convert-images-grayscale">Display Images as Grayscale with CSS&nbsp;Filters</a></li></ul></li><li id="nav-popular"><div class="heading">Popular Topics</div><ul class="nav-posts half"><li><a href="/tutorials/html5" class="bold">HTML5</a></li><li><a href="/tutorials/css/animations">CSS Animations</a></li><li><a href="/tutorials/firefoxos">Firefox OS</a></li><li><a href="/tutorials/jquery">jQuery</a></li><li><a href="/tutorials/mootools">MooTools</a></li><li><a href="/tutorials/php">PHP</a></li></ul><ul class="nav-posts half"><li><a href="/tutorials/css" class="bold">CSS3</a></li><li><a href="/tutorials/wordpress">WordPress</a></li><li><a href="/tutorials/mobile">Mobile</a></li><li><a href="/tutorials/seo">SEO</a></li><li><a href="/tutorials/javascript">JavaScript</a></li><li><a href="/tutorials/dojo">Dojo Toolkit</a></li></ul></li><li id="nav-about"><div class="heading">David Walsh Blog</div><ul class="nav-posts"><li><a href="/about-david-walsh" class="bold">About David Walsh</a></li><li><a href="/contact">Contact and Advertise</a></li><li><a href="/deals">Developer Deals</a></li><li><a href="/mozilla">Mozilla</a></li></ul></li></ul></div></nav></div><div class="header-middle"><ul class="social-icons"><li><a href="/feed" data-noxhr="true" class="rss"><i class="fa fa-rss" aria-hidden="true"></i></a></li><li><a href="//twitter.com/davidwalshblog" rel="nofollow" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li><li><a href="//facebook.com/davidwalshblog" rel="nofollow" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li><li><a href="https://plus.google.com/114538814489633467974?rel=author" rel="nofollow" class="google-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li><li><a href="//github.com/darkwing" rel="nofollow" class="github"><i class="fa fa-github" aria-hidden="true"></i></a></li><li><a href="//linkedin.com/in/davidjameswalsh" rel="nofollow" class="linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li><li><a href="/?s=search" class="search"><i class="fa fa-search" aria-hidden="true"></i></a></li></ul><div class="header-search"><form action="/"><label for="header-search-field"><span class="offscreen">Search</span><i class="fa fa-search" aria-hidden="true"></i><input type="search" name="s" id="header-search-field"></label></form></div></div><div class="header-sda fx5" id="header-fx"><a href="//dwf.tw/treehouse" rel="nofollow"><img src="/wp-content/themes/punky/images/sda/tree-ban.svg"  width="450" height="76" alt="Treehouse" /></a></div></div></header><div id="masthead-title" aria-hidden="true"><div class="center"><!--MASTHEAD--><div id="masthead-title-text"></div><!--/MASTHEAD--></div></div>
+<!-- content wrapper --><div class="main"><div class="center clear"><!-- main content column --><main id="main"><!--CONTENT-->
+<div class="demo-wrapper">
+
+<h1>Demo:  Create a CSS Cube</h1>
+
+<div class="demo-conversion">Read <a href="http://davidwalsh.name/css-cube" target="_top">Create a CSS Cube</a></div>
+
+<div id="promoNode"></div>	
+	<p>Check out the awesome CSS cube below!</p>
+
+	<h2>Depth Cube</h2>
+	<div style="height: 300px;margin-top:40px;">
+	<div class="cube-wrap">
+		<div class="cube depth">
+			<div class="front-pane">front</div>
+			<div class="back-pane">back</div>
+			<div class="top-pane">top</div>
+			<div class="bottom-pane">bottom</div>
+			<div class="left-pane">left</div>
+			<div class="right-pane">right</div>
+		</div>
+	</div>
+	</div>
+
+	
+	<h2>Vertical Spin</h2>
+	<div style="height: 300px;margin-top:60px;">
+	<div class="cube-wrap vertical">
+		<div class="cube depth">
+			<div class="front-pane">front</div>
+			<div class="back-pane">back</div>
+			<div class="top-pane">top</div>
+			<div class="bottom-pane">bottom</div>
+			<div class="left-pane">left</div>
+			<div class="right-pane">right</div>
+		</div>
+	</div>
+	</div>
+
+	<h2>Flat Spin</h2>
+	<div style="height: 300px;margin-top:60px;">
+	<div class="cube-wrap flat">
+		<div class="cube depth">
+			<div class="front-pane">front</div>
+			<div class="back-pane">back</div>
+			<div class="top-pane">top</div>
+			<div class="bottom-pane">bottom</div>
+			<div class="left-pane">left</div>
+			<div class="right-pane">right</div>
+		</div>
+	</div>
+	</div>
+	
+	
+</div>
+
+<p class="demo-conversion">Back to: <a href="http://davidwalsh.name/css-cube" target="_top">Create a CSS Cube</a></p>
+
+</main>
+
+	<style>
+		body .one .bsa_it_ad { background: #f8f8f8; border: none; font-family: inherit; width: 200px; position: absolute; top: 0; right: 0; text-align: center; border-radius: 8px; }
+		body .one .bsa_it_ad .bsa_it_i { display: block; padding: 0; float: none; margin: 0 0 5px; }
+		body .one .bsa_it_ad .bsa_it_i img { padding: 10px; border: none; margin: 0 auto; }
+		body .one .bsa_it_ad .bsa_it_t { padding: 6px 0; }
+		body .one .bsa_it_ad .bsa_it_d { padding: 0; font-size: 12px; color: #333; }
+		body .one .bsa_it_p { display: none; }
+		body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 10px; margin: 12px 15px 0; text-align: right; }
+	</style>
+	<script type="text/javascript" src="http://cdn.adpacks.com/adpacks.js?legacyid=1280449&zoneid=1386&key=db3b221ddd8cbba67739ae3837520ffe&serve=C6SI42Y&placement=davidwalshname&circle=dev" id="_adpacks_js"></script>
+
+
+<script>
+
+document.body.className+= ' demo-page';
+
+window.addEventListener('load', function() {
+	var s = 'script';
+	var d = document;
+	var w = window;
+	var firstScript = d.getElementsByTagName(s)[0];
+
+	
+	(function() {
+		var first_paragraph = document.getElementsByTagName('p')[0];
+		if(first_paragraph) {
+			first_paragraph.className = 'demo-intro';
+		}
+
+		setTimeout(function() {
+			var headerA = d.getElementById('header-fx');
+			headerA.className += ' complete';
+		}, 2000);
+	})();
+	
+
+	// BSA bitches!
+	var bsa = d.createElement(s);
+	bsa.async = 1;
+	bsa.src = '//s3.buysellads.com/ac/bsa.js';
+	firstScript.parentNode.insertBefore(bsa, firstScript);
+
+	// Promo!
+	(function() {
+
+		var promoNode = d.getElementById('promoNode');
+
+		// Temporary - use MooTools 2.0 when available
+		function createElement(tagName, attr, parent) {
+			var el = d.createElement(tagName);
+			for(prop in attr) {
+				if(attr.hasOwnProperty(prop)) el.setAttribute(prop, attr[prop]);
+			}
+			parent.appendChild(el);
+			return el;
+		}
+
+		// Loads a script
+		function loadScript(url) {
+			var script = d.createElement('script');
+			script.src = url;
+			script.setAttribute('async', 'true');
+			d.documentElement.firstChild.appendChild(script);
+		}
+
+		// Create the Twitter widget, inject
+		createElement('a', {
+			href: '//twitter.com/share',
+			'data-count': 'horizontal',
+			'class': 'twitter-share-button'
+		}, createElement('span', {}, promoNode));
+		loadScript('http://platform.twitter.com/widgets.js');
+
+		// Create the Google Plus icon
+		var gl = createElement('g:plusone', {
+			href: w.location,
+			size: 'medium'
+		}, createElement('span', {}, promoNode));
+		loadScript('//apis.google.com/js/plusone.js');
+		
+		// Create the Facebook widget
+		createElement('iframe', {
+			src: '//facebook.com/plugins/like.php?href=' + w.location,
+			scrolling: 'no',
+			frameborder: 0,
+			allowTransparency: true,
+			style: 'border:none; overflow:hidden; float:left; height:24px; margin-top:3px;'
+		}, createElement('span', {}, promoNode));
+
+	})();
+});
+
+!function(e){var t=e.createElement("link"),s="setAttribute";t[s]("type","text/css"),t[s]("rel","stylesheet"),t[s]("href","//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),e.head.appendChild(t)}(z.d);</script>
+</body>
+</html>
