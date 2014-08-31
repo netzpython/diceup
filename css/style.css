@@ -1,0 +1,102 @@
+
+
+/* general */
+html  { 
+    background: #282828;   
+    height: 100%;
+}
+
+body { 
+    height: 100%;
+    background: none;
+}
+
+body.noMouse *,
+body.noMouse { cursor: none; }
+
+html, 
+body { 
+    position: relative;  
+    padding: 0;
+    margin: 0;
+    color: #fff;
+}
+
+/* hidden on startup */
+#game, 
+#start,
+#createPlayer,
+#gameModeLayer,
+#niceAlerts > div,
+#rollTheDize { display: none; }
+
+#rollTheDize,
+#niceAlerts { 
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 100%;
+    height:auto;
+    text-align: center; 
+    z-index: 1000;
+}
+
+#niceAlerts {z-index: 1001; }
+
+#niceAlerts > div { background: rgba(0,0,0,0.8); color: #fff; }
+
+#dices {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -300px;
+    height: 120px;
+}
+
+
+#dices .reset {
+    opacity: 0.5;
+}
+
+#curScores {
+    position: absolute;    
+    top: 20px;
+    left: 50%;
+    text-align: center;
+    background: rgba(255,255,255,0.5);
+}
+
+
+#players {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 300px;
+}
+
+#players .playerColumn {
+    float:left;
+    padding: 10px
+}
+
+.total { font-weight: bold; font-size: 30px;}
+
+#actions {
+    position: absolute;
+    bottom: 5%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#actions a img {
+    max-width: 100px; 
+    margin: 0 100px;
+}
+
+#actions a.inactive { opacity: 0.5; }
+
+#actions a#nextPlayer { display: none; }
+
+.playerTypes a.active img { background: #fff;}
+.playerTypes a:hover img{ background: rgba(255,255,255,0.5);}

@@ -6,11 +6,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         
-        <link rel="stylesheet" type="text/css" href="style.css" media="all" />
-        <script src="jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="scripts.js" type="text/javascript"></script>
-        <script src="bot.js" type="text/javascript"></script>
-        
+        <link rel="stylesheet" type="text/css" href="minify/min/index.php?g=css" media="all" />
+        <script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+        <script src="js/scripts.js" type="text/javascript"></script>
+        <script src="js/bot.js" type="text/javascript"></script>
+        <script src="js/prefixfree.min.js" type="text/javascript"></script>
     </head>
     
     <body>
@@ -58,19 +58,12 @@
             <!-- Player Scores -->
             <div id="players"></div>        
 
-
-            <!-- dize animation -->
-            <div id="rollTheDize"><img src="images/rolling.gif"></div>
-
-
-            <!-- dizes -->
-            <div id="dizes">
-                <img id="dize_1" src="images/1.png" class="down reset" />
-                <img id="dize_2" src="images/2.png" class="down reset" />
-                <img id="dize_3" src="images/3.png" class="down reset" />
-                <img id="dize_4" src="images/4.png" class="down reset" />
-                <img id="dize_5" src="images/5.png" class="down reset" />
-                <img id="dize_6" src="images/6.png" class="down reset" />
+            <!-- dices -->
+            <div id="dices" style="font-size: 5px;">
+                <div id="wrapper">
+                    <div id="platformUp"></div>
+                    <div id="platform"></div>
+                </div>
             </div>
 
             <!-- current scores -->
