@@ -110,25 +110,36 @@ body {
     perspective: 800em;
 }
 #platform {
-  margin-top:10em;
+  margin-top:20em;
+  padding: 0 30px;
 }
 
 .dice {
     position: absolute;
     width: 20em;
     height: 20em;  
-    transform-style: preserve-3d;        
+    transform-style: preserve-3d;  
+    transition: margin 500ms ease-in;
 }
 #platform .dice {
     animation: spin 50s infinite linear;
+    
 }
 
-#dice_1 {margin-left: 0;}
-#dice_2 {margin-left: 28em;}
-#dice_3 {margin-left: 56em;}
-#dice_4 {margin-left: 84em;}
-#dice_5 {margin-left: 112em;}
-#dice_6 {margin-left: 140em;}
+#platform .dice:nth-child(1) {margin-left: 0;}
+#platform .dice:nth-child(2) {margin-left: 28em;}
+#platform .dice:nth-child(3) {margin-left: 56em;}
+#platform .dice:nth-child(4) {margin-left: 84em;}
+#platform .dice:nth-child(5) {margin-left: 112em;}
+#platform .dice:nth-child(6) {margin-left: 140em;}
+
+#platformUp .dice { right: 0; }
+#platformUp .dice:nth-child(1) {margin-right: 0;}
+#platformUp .dice:nth-child(2) {margin-right: 28em;}
+#platformUp .dice:nth-child(3) {margin-right: 56em;}
+#platformUp .dice:nth-child(4) {margin-right: 84em;}
+#platformUp .dice:nth-child(5) {margin-right: 112em;}
+#platformUp .dice:nth-child(6) {margin-right: 140em;}
 
 .side {
     position: absolute;
@@ -192,7 +203,7 @@ body {
     width:4.6em;
     height:4.6em;
     border-radius:2.3em;
-    background:#27fb04;
+    background: @c_highlight;
     box-shadow:inset 0.5em 0 1em #ccc;
 }
 .dot.center {

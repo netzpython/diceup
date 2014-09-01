@@ -2,6 +2,8 @@
 // Players
 var players = new Array();
 
+// colors
+var colors = new Array('#939','#3c3','#ff0','#06f','#f69','#f00','#f60');
 
 // index current Player
 var playerId = 0;
@@ -27,11 +29,14 @@ var endScore = 10000;
 // last turn
 var endTurn = 9999;
 
+// timeout for switching bot to player
+var nextTimeout;
+
 $(document).ready(function() {
     
-    niceAlert('Wellcome');
+    //niceAlert('Wellcome');
     
-    setTimeout(function(){startLayer();},1300);
+    setTimeout(function(){startLayer();},1);
 });
 
 function playerType(type){
@@ -43,12 +48,14 @@ function playerType(type){
     if(type==='human'){        
         $('#playerHead').removeClass('bot');
         $('#botPool option').removeProp('selected');
+        $('#colors').show();
     }
     
     // bot
     if(type==='bot'){        
         $('#playerHead').addClass('bot');
         $('#playerName').val('');
+        $('#colors').hide();
     }    
 }
 
@@ -63,6 +70,20 @@ function startLayer() {
         botSelect+= '<option value="'+index+'">'+value['name']+'</option>';
     });
     $('#botPool').html(botSelect);
+    
+    // colors
+    var colorsHtml = '<input id="color" type="hidden" />';
+    $.each(colors, function( index, value ) {
+        colorsHtml+= '<a data-color="'+value+'" style="background-color:'+value+'"></a>';
+    });
+    $('#colors').html(colorsHtml);
+    
+    $('a[data-color]').click(function(){
+        $('a[data-color]').removeClass('active');
+        $('#color').val($(this).attr('data-color'));
+        $(this).addClass('active');
+    });
+    $('a[data-color]').first().click();
     
     // switch to game mode (mobile only)
     $('#chooseGameMode').click(function(){        
@@ -93,18 +114,20 @@ function startLayer() {
     
     // create Player
     $('#createPlayer').click(function() {
-        
-        playerObject();
-        playerListRow();
-        resetPlayerForm();      
-        $('#gameModeLayer').show();
-
+        createPlayer() 
     });
     
     // start Game
     $('#startGame').click(function() {
         startGame();
     });    
+}
+
+function createPlayer() {
+    playerObject();
+    playerListRow();
+    resetPlayerForm();      
+    $('#gameModeLayer').show();    
 }
 
 function playerObject() {
@@ -118,13 +141,16 @@ function playerObject() {
     // Human
     if($('#playerType').val()==='human'){
         players[playerId]["name"] = $('#playerName').val(); 
+        players[playerId]["color"] = $('#color').val();
     // Bot
     } else {
         players[playerId]["name"] = botPool[$('#botPool').val()]['name']; 
+        players[playerId]["color"] = botPool[$('#botPool').val()]['color']; 
         players[playerId]["botBrain"] = botPool[$('#botPool').val()];
 
         $('#botPool option[value='+$('#botPool').val()+']').remove();
     }    
+   
 }
 
 function playerListRow() {
@@ -132,15 +158,21 @@ function playerListRow() {
     $('#noPlayersHint').hide();
     
     // new row in the playersList
-    var row = '<div>'+players[playerId]["name"]+'</div>';
+    var row = '<div class="player_'+playerId+'" style="border-color:'+players[playerId]["color"]+';">'+players[playerId]["name"]+'</div>';
     $('#playerList').append(row);
+    
 }
 
 function resetPlayerForm(){
     playerId++;
     $('#playerName').val('');
     $('#createPlayer').hide();
-    playerType('human');    
+    playerType('human');      
+    
+    // reset color
+    $('#colors').hide();
+    var nth = playerId+2;
+    $('a[data-color]:nth-child('+nth+')').click();     
 }
 
 
@@ -180,6 +212,7 @@ function startGame() {
         if($(this).hasClass('inactive')) {
             alert('Geht net!');
         } else {
+            clearTimeout(nextTimeout);
             nextPlayer();
         }
     });   
@@ -190,6 +223,10 @@ function startGame() {
 }
 
 function plattformInit(){
+    
+    // scale dices
+    var fs = $('#dices').width()/160;
+    $('#dices').css('font-size',fs+'px');
     
     // create dices
     for(var i=1; i<7; i++) {
@@ -306,15 +343,16 @@ function nextPlayer(written) {
     }      
     
     // show current Player
-    $('#curPlayer span').html(players[playerId]['name']);
-    niceAlert(players[playerId]['name']);
+    curPlayer();
+    
     
     // reset temp scores
     roundScore = 0;
     
     // reset dices
     $("#dices .dice").addClass('reset');
-    $("#dices .dice").removeClass('counted countAble').attr('data-round',-1);
+    $("#dices .dice").removeClass('counted countAble').attr('data-round',-1).removeAttr('data-value');
+    $("#dices .dice.up").addClass('down').removeClass('up').appendTo('#platform');    
     roundNr = 0;    
     
     // new score row
@@ -356,6 +394,10 @@ function nextPlayer(written) {
     checkWriteAndRoll();
 }
 
+function curPlayer(){
+    $('#curPlayer').html('<div style="border-color: '+players[playerId]['color']+';">'+players[playerId]['name']+'</div>');
+    $('.dot').css('background-color',players[playerId]['color']);
+}
 
 function upDown(){   
     $("#dices .dice").click(function(){ 
