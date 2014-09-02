@@ -1,3 +1,5 @@
+// debug Mode
+var debug = true;
 
 // Players
 var players = new Array();
@@ -31,6 +33,10 @@ var endTurn = 9999;
 
 // timeout for switching bot to player
 var nextTimeout;
+
+// winner
+var winScore = 0;
+var winner = '';
 
 $(document).ready(function() {
     
@@ -225,7 +231,7 @@ function startGame() {
 function plattformInit(){
     
     // scale dices
-    var fs = $('#dices').width()/160;
+    var fs = $('#dices').width()/180;
     $('#dices').css('font-size',fs+'px');
     
     // create dices
@@ -315,7 +321,14 @@ function write(){
     fastAlert(players[playerId]['name']+' writes '+roundScore);
     
     if(players[playerId]["total"]>=endScore) {
+        
         endTurn = turnNr;
+        
+        if(players[playerId]["total"]>winScore){
+            winScore = players[playerId]["total"];
+            winner = players[playerId]['name'];
+        }  
+        
         niceAlert(players[playerId]['name']+' reaches the end score!');
     }
     
@@ -395,6 +408,7 @@ function nextPlayer(written) {
 }
 
 function curPlayer(){
+    consoleLog('---   '+players[playerId]['name']+'   ---');
     $('#curPlayer').html('<div style="border-color: '+players[playerId]['color']+';">'+players[playerId]['name']+'</div>');
     $('.dot').css('background-color',players[playerId]['color']);
 }
@@ -501,7 +515,7 @@ function roll() {
     $('#dices .down').each(function() {
         
         var i = getRandomInt();
-        
+        consoleLog(i);
         $(this).attr('data-value', i);
         $(this).attr('src', 'images/'+i+'.png');
     });
@@ -525,12 +539,12 @@ function getRandomInt () {
  * @param {string} up '.up' to check selected dices
  */
 function sumDice(up) {
-    console.log('sumDice');
+    
     var tempScores = new Array();
     var tempCount = new Array(new Array(),new Array(),new Array(),new Array(),new Array(),new Array(),new Array());
     var tempValue = 0;
     
-    $('#dices .dice'+up).removeClass('counted');
+    $('#dices .dice'+up).removeClass('counted countAble');
     
     $('#dices .dice'+up+'[data-round="'+roundNr+'"]').each(function(){ 
         var i = parseInt($(this).attr('data-value'));
@@ -662,7 +676,13 @@ function check4tripple(tempCount,up) {
  */
 function check4single(tempValue,up) {
     
-    $('#dices .dice'+up+'[data-round="'+roundNr+'"]').not('.counted').each(function(){ 
+    if(up){
+        var nono = '.counted';
+    } else {
+        var nono = '.countAble';
+    }
+    
+    $('#dices .dice'+up+'[data-round="'+roundNr+'"]').not(nono).each(function(){ 
         var i = parseInt($(this).attr('data-value'));
         if(i===1){
             tempValue+=100;
@@ -706,6 +726,7 @@ function GetUnique(inputArray) {
 
 var alertNr = 0;
 function niceAlert(text) {
+    consoleLog(text);
     $('#niceAlerts').prepend('<div id="niceAlert_'+alertNr+'" class="niceAlert active">'+text+'</div>');
     $('#niceAlert_'+alertNr).fadeIn(300);
     setTimeout('hideAlert()',1000);
@@ -717,30 +738,26 @@ function hideAlert() {
 }
 
 function fastAlert(text) {
+    consoleLog(text);
     $('#niceAlerts').prepend('<div id="niceAlert_'+alertNr+'" class="fastAlert active">'+text+'</div>');
     $('#niceAlert_'+alertNr).fadeIn(150);
     setTimeout('fastHideAlert()',600);
     alertNr++;
 }
 
-function fastHideAlert() {
-    console.log('fastHide');
+function fastHideAlert() {    
      $('#niceAlerts > div.fastAlert.active').last().removeClass('active').fadeOut(300);
 }
 
-function endGame() {
-    
-    var winScore = 0;
-    var winner = '';
-    
-    $.each(players, function( index, value ) {
-           if(this['total']>winScore){
-               winScore = this['total'];
-               winner = this['name'];
-           }
-        });
-    
+function endGame() {        
     alert('Game Over!');
     alert(winner+' wins with '+winScore+' points.');
     location.reload();
+}
+
+function consoleLog(txt) {
+    if(debug) {
+        console.log(txt);
+    }
+    
 }
